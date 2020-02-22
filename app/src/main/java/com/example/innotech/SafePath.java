@@ -3,6 +3,7 @@ package com.example.innotech;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -51,7 +52,7 @@ public class SafePath extends FragmentActivity implements OnMapReadyCallback,
             checkLocationPermission();
 
         }
-        
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -92,12 +93,15 @@ public class SafePath extends FragmentActivity implements OnMapReadyCallback,
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             bulidGoogleApiClient();
             mMap.setMyLocationEnabled(true);
+            LocationManager lm = (LocationManager)getSystemService(LOCATION_SERVICE);
+            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
 
-        in_button_place();
     }
 
     @Override
@@ -121,6 +125,8 @@ public class SafePath extends FragmentActivity implements OnMapReadyCallback,
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomBy(10));
 
+        //in_button_place();
+
         if(client != null)
         {
             LocationServices.FusedLocationApi.removeLocationUpdates(client,this);
@@ -131,11 +137,6 @@ public class SafePath extends FragmentActivity implements OnMapReadyCallback,
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
         locationRequest = new LocationRequest();
         locationRequest.setInterval(100);
         locationRequest.setFastestInterval(1000);
@@ -146,6 +147,11 @@ public class SafePath extends FragmentActivity implements OnMapReadyCallback,
         {
             LocationServices.FusedLocationApi.requestLocationUpdates(client, locationRequest, this);
         }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
     }
 
     @Override
