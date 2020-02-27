@@ -107,8 +107,8 @@ public class SafePath extends FragmentActivity implements OnMapReadyCallback,
     @Override
     public void onLocationChanged(Location location) {
 
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
+        this.latitude = location.getLatitude();
+        this.longitude = location.getLongitude();
         lastlocation = location;
         if(currentLocationmMarker != null)
         {
@@ -125,10 +125,24 @@ public class SafePath extends FragmentActivity implements OnMapReadyCallback,
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomBy(10));
 
-        //in_button_place();
+        //
 
         if(client != null)
         {
+            //in_button_place();
+            Object dataTransfer[] = new Object[2];
+            GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
+
+            // mMap.clear();
+            String hospital = "hospital";
+            String url = getUrl(latitude, longitude, hospital);
+            dataTransfer[0] = mMap;
+            dataTransfer[1] = url;
+
+            getNearbyPlacesData.execute(dataTransfer);
+            Toast.makeText(SafePath.this, "Showing Nearby Hospitals", Toast.LENGTH_SHORT).show();
+
+
             LocationServices.FusedLocationApi.removeLocationUpdates(client,this);
         }
     }
@@ -169,7 +183,7 @@ public class SafePath extends FragmentActivity implements OnMapReadyCallback,
         googlePlaceUrl.append("&radius="+PROXIMITY_RADIUS);
         googlePlaceUrl.append("&type="+"Hospitals");
         googlePlaceUrl.append("&sensor=true");
-        googlePlaceUrl.append("&key="+"AIzaSyCNnX4t2GVKlwNiFFZYuVzz1CzKVXhq_Ko");
+        googlePlaceUrl.append("&key="+"AIzaSyCSTKQMoP4pbHjLhswOmKdVYnpOou6dMSs");
 
         Log.d("MapsActivity", "url = "+googlePlaceUrl.toString());
 
@@ -210,7 +224,7 @@ public class SafePath extends FragmentActivity implements OnMapReadyCallback,
         Object dataTransfer[] = new Object[2];
         GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
 
-        mMap.clear();
+       // mMap.clear();
         String hospital = "hospital";
         String url = getUrl(latitude, longitude, hospital);
         dataTransfer[0] = mMap;

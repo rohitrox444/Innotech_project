@@ -2,4 +2,5 @@
     <string name="app_name">innotech</string>
     <string name="button_value">Quick SOS</string>
     <string name="title_activity_safe_path">Map</string>
+    <string name="title_activity_home">HomeActivity</string>
 </resources>
